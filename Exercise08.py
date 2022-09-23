@@ -7,7 +7,7 @@ testDB = mysql.connector.connect(
     port= 3306,
     database='flight_game',
     user='root',
-    password='root',
+    password='xxxxx',
     autocommit= True
 )
 
