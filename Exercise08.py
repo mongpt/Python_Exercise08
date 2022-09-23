@@ -1,4 +1,6 @@
+
 # NOTE: This whole exercise must be run from the top to button to utilize below common function.
+from tabulate import tabulate
 import mysql.connector
 testDB = mysql.connector.connect(
     host='127.0.0.1',
@@ -14,8 +16,8 @@ testDB = mysql.connector.connect(
 icao = input("Please input ICAO code: ")
 mycursor = testDB.cursor()
 mycursor.execute(f"select name as 'airport name', municipality as 'location' from airport where ident = '{icao}';")
-for x in mycursor:
-  print(x)
+result = mycursor.fetchall()
+print(tabulate(result, tablefmt="grid"))
 print(mycursor.rowcount, 'rows in set')
 
 # Part 2: Write a program that asks the user to enter the area code (for example FI) and prints out the airports located
@@ -23,8 +25,8 @@ print(mycursor.rowcount, 'rows in set')
 areaCode = input("Input the area code (i.e. FI): ")
 mycursor = testDB.cursor()
 mycursor.execute(f"select country.name as 'country name', airport.name as 'airport name', airport.type as 'airport type' from country, airport where country.iso_country = airport.iso_country and airport.iso_country = '{areaCode}' order by airport.type;")
-for x in mycursor:
-  print(x)
+result = mycursor.fetchall()
+print(tabulate(result, tablefmt="grid"))
 print(mycursor.rowcount, 'rows in set')
 
 # Part 3: Write a program that asks the user to enter the ICAO codes of two airports. The program prints out the
@@ -35,12 +37,12 @@ from geopy import distance
 mycursor = testDB.cursor()
 icao1 = input("Input the first ICAO code: ")
 mycursor.execute(f"select name from airport where ident = '{icao1}';")
-for x in mycursor:
-    print(x)
+result = mycursor.fetchall()
+print(tabulate(result, tablefmt="grid"))
 icao2 = input("Input the second ICAO code: ")
 mycursor.execute(f"select name from airport where ident = '{icao2}';")
-for x in mycursor:
-    print(x)
+result = mycursor.fetchall()
+print(tabulate(result, tablefmt="grid"))
 mycursor.execute(f"select latitude_deg, longitude_deg from airport where ident = '{icao1}' or ident = '{icao2}';")
 listDeg = []
 for x in mycursor:
